@@ -37,7 +37,7 @@ Below is the list of assignments and ungraded labs course-wise.
 
 1. Toxicity Classifier (C1_W3_Lab_1_toxicity.html)
 2. Image Classification Using MobileNet (C1_W3_Lab_2_mobilenet.html)
-3. Linear Model (C1_W3_Lab_3A_linear_to_JavaScript.ipynb & C1_W3_Lab_3B_linear.html)
+3. Linear Model (C1_W3_Lab_3A_linear_to_JavaScript.ipynb and C1_W3_Lab_3B_linear.html)
 
 ## Week 4
 
@@ -48,3 +48,53 @@ Below is the list of assignments and ungraded labs course-wise.
 ### Ungraded Lab
 
 1. Rock Paper Scissors (C1_W4_Lab_1_retrain.html)
+
+
+# C2 - Device-based Models with TensorFlow Lite
+
+## Week 1
+
+### Assignment 
+
+- Train Your Own Model and Convert It to TFLite (C2_W1_Assignment.ipynb)
+
+### Ungraded Labs
+
+1. Running TFLite Models (C2_W1_Lab_1_Linear_Regression.ipynb)
+2. Transfer Learning with TensorFlow Hub for TFLite (C2_W1_Lab_2_Transfer_Learning.ipynb)
+
+## Week 2 (Android)
+
+### Assignment (Optional)
+
+- Rock, Paper & Scissors with TensorFlow Hub - TFLite (C2_W2_Assignment.ipynb and C2_W2_Assignment_Solution.ipynb)
+
+### Ungraded Labs
+
+- Cats vs Dogs
+- Image Classification
+- Object Detection
+
+## Week 3 (iOS)
+
+### Assignment (Optional)
+
+- Rock, Paper & Scissors with TensorFlow Hub - TFLite (C2_W3_Assignment.ipynb and C2_W3_Assignment_Solution.ipynb)
+
+### Ungraded Labs
+
+- Cats vs Dogs
+- Image Classification
+- Object Detection
+
+## Week 4 (Raspberry Pi)
+
+### Assignment (Optional)
+
+- Rock, Paper & Scissors with TensorFlow Hub - TFLite (C2_W4_Assignment.py and C2_W2_Assignment_Solution.py)
+
+### Ungraded Labs
+
+- Cats vs Dogs
+- Image Classification
+- Object Detection
