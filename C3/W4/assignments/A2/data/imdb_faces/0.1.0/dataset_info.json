@@ -1,0 +1,15 @@
+{
+  "citation": "@article{Rothe-IJCV-2016,\n  author = {Rasmus Rothe and Radu Timofte and Luc Van Gool},\n  title = {Deep expectation of real and apparent age from a single image without facial landmarks},\n  journal = {International Journal of Computer Vision (IJCV)},\n  year = {2016},\n  month = {July},\n}\n@InProceedings{Rothe-ICCVW-2015,\n  author = {Rasmus Rothe and Radu Timofte and Luc Van Gool},\n  title = {DEX: Deep EXpectation of apparent age from a single image},\n  booktitle = {IEEE International Conference on Computer Vision Workshops (ICCVW)},\n  year = {2015},\n  month = {December},\n}\n",
+  "description": "Since the publicly available face image datasets are often of small to medium size, rarely exceeding tens of thousands of images, and often without age information we decided to collect a large dataset of celebrities. For this purpose, we took the list of the most popular 100,000 actors as listed on the IMDb website and (automatically) crawled from their profiles date of birth, name, gender and all images related to that person. Additionally we crawled all profile images from pages of people from Wikipedia with the same meta information. We removed the images without timestamp (the date when the photo was taken). Assuming that the images with single faces are likely to show the actor and that the timestamp and date of birth are correct, we were able to assign to each such image the biological (real) age. Of course, we can not vouch for the accuracy of the assigned age information. Besides wrong timestamps, many images are stills from movies - movies that can have extended production times. There are 62,328 images from Wikipedia. \n\n",
+  "location": {
+    "urls": [
+      "https://data.vision.ee.ethz.ch/cvl/rrothe/imdb-wiki/"
+    ]
+  },
+  "name": "imdb_faces",
+  "supervisedKeys": {
+    "input": "image",
+    "output": "gender"
+  },
+  "version": "0.1.0"
+}
