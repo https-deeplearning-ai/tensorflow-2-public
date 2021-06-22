@@ -142,3 +142,45 @@ Below is the list of assignments and ungraded labs course-wise.
 
 1. Parallelization with TFDS _(C3_W4_A1_Assignment.ipynb)_
 2. Adding a Dataset of your Own to TFDS _(C3_W4_A2_Assignment_Optional.ipynb and C3_W4_A2_Assignment_Optional_Solution.ipynb)_
+
+
+# C4 - Advanced Deployment Scenarios with TensorFlow
+
+## Week 1
+
+### Assignment 
+
+- Train Your Own Model and Serve It With TensorFlow Serving _(C4_W1_Assignment.ipynb and C4_W1_Assignment_Solution.ipynb )_
+
+### Ungraded Labs
+
+1. Getting Started with TensorFlow Serving _(C4_W1_Lab_1_tfserving_hello_world.ipynb)_
+2. Train and serve a TensorFlow model with TensorFlow Serving _(C4_W1_Lab_2_Train_and_serve_a_TensorFlow_model_with_TensorFlow_Serving.ipynb)_
+
+## Week 2
+
+### Assignment 
+
+- Exporting an MNIST Classifier in SavedModel Format _(C4_W2_Assignment.ipynb)_
+
+### Ungraded Labs
+
+1. Getting Started with TensorFlow Hub _(C4_W2_Lab_1_tfhub_basic_examples.ipynb)_
+2. Text Classification _(C4_W2_Lab_2_text_classification.ipynb)_
+3. Transfer Learning with TensorFlow Hub _(C4_W2_Lab_3_transfer_learning.ipynb)_
+
+## Week 3
+
+### Assignment 
+
+- TensorBoard with Fashion MNIST _(C4_W3_Assignment.ipynb)_
+
+### Ungraded Labs
+
+- Displaying image data in TensorBoard _(C4_W3_Lab_1_image_summaries.ipynb)_
+
+## Week 4
+
+### Ungraded Labs
+
+- Custom Federated Algorithms, Part 1: Introduction to the Federated Core _(C4_W4_Lab_1_custom_federated_algorithms.ipynb)_
