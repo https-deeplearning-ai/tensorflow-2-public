@@ -1,11 +1,10 @@
 <html>
 <head></head>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@1.3.2/dist/tf.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
     <script lang="js">
         
         async function run(){
-            const trainingUrl = '/data/wdbc-train.csv';
+            const trainingUrl = 'data/wdbc-train.csv';
             
             // Take a look at the 'wdbc-train.csv' file and specify the column
             // that should be treated as the label in the space below.
@@ -26,6 +25,9 @@
             // Iris dataset example. 
             const convertedTrainingData = 
                   trainingData.map(({xs, ys}) => {
+                      const labels = [
+                          ys.diagnosis
+                      ]
                       return{ xs: Object.values(xs), ys: Object.values(labels)};
                   }).batch(10)
                   
@@ -50,14 +52,14 @@
             // Iris dataset example. 
             const convertedTestingData = 
                   testingData.map(({xs, ys}) => {
-                      return{ xs: Object.values(xs), ys: Object.values(labels)};
+                      return{ xs: Object.values(xs), ys: Object.values(ys)};
                   }).batch(10)
                   
 
             // Specify the number of features in the space below.
             // HINT: You can get the number of features from the number of columns
             // and the number of labels in the training data. 
-            const numOfFeatures = 29
+            const numOfFeatures = (await trainingData.columnNames()).length - 1
             
                 
             // In the space below create a neural network that predicts 1 if the diagnosis is malignant
@@ -69,10 +71,7 @@
             // using ReLu activation functions where applicable. For this dataset only a few
             // hidden layers should be enough to get a high accuracy.  
             const model = tf.sequential();
-            
-           model.add(tf.layers.dense({inputShape: [numOfFeatures], activation: "relu",
-                                     units: 40}))
-        
+            model.add(tf.layers.dense({inputShape: [numOfFeatures], activation: "relu", units: 40}))
             model.add(tf.layers.dense({activation:"relu", units: 20}))
             model.add(tf.layers.dense({activation:"sigmoid", units: 1}))
             
