@@ -1,0 +1,3 @@
+Link to the Tensorflow.org's "Load CSV data", Colab
+
+https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/tutorials/load_data/csv.ipynb
