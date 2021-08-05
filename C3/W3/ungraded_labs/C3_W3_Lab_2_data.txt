@@ -1,0 +1,4 @@
+
+Link to the Tensorflow.org's "tf.data: Build TensorFlow input pipelines", Colab
+
+https://colab.research.google.com/github/tensorflow/docs/blob/master/site/en/guide/data.ipynb
