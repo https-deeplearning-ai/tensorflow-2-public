@@ -1,0 +1,5 @@
+Link to the Tensorflow.org's: Displaying image data in TensorBoard
+
+https://www.tensorflow.org/tensorboard/image_summaries
+
+https://colab.research.google.com/github/tensorflow/tensorboard/blob/master/docs/image_summaries.ipynb
