@@ -16,46 +16,105 @@ function getModel() {
     model = tf.sequential();
     
     // YOUR CODE HERE
-    
-    
+
+	model.add(tf.layers.conv2d({
+		inputShape: [28, 28, 1],
+		kernelSize: 3,
+		filters: 64,
+		activation: 'relu'
+	}));
+
+	model.add(tf.layers.maxPooling2d({
+		poolSize: [2, 2]
+	}));
+
+	model.add(tf.layers.conv2d({
+		filters: 32,
+		kernelSize: 3,
+		activation: 'relu'
+	}));
+	model.add(tf.layers.maxPooling2d({
+		poolSize: [2, 2]
+    }));
+
+	model.add(tf.layers.flatten());
+
+	model.add(tf.layers.dense({
+		units: 256,
+		activation: 'relu'
+    }));
+
+	model.add(tf.layers.dense({
+		units: 10,
+		activation: 'softmax'
+	}));
+
+
     // Compile the model using the categoricalCrossentropy loss,
     // the tf.train.adam() optimizer, and accuracy for your metrics.
-    model.compile(// YOUR CODE HERE);
-    
+    // YOUR CODE HERE);
+    model.compile({
+		optimizer: tf.train.adam(),
+		loss: 'categoricalCrossentropy',
+		metrics: ['accuracy']
+	});
+
     return model;
 }
 
 async function train(model, data) {
-        
-    // Set the following metrics for the callback: 'loss', 'val_loss', 'accuracy', 'val_accuracy'.
-    const metrics = // YOUR CODE HERE    
 
-        
-    // Create the container for the callback. Set the name to 'Model Training' and 
-    // use a height of 1000px for the styles. 
-    const container = // YOUR CODE HERE   
-    
-    
-    // Use tfvis.show.fitCallbacks() to setup the callbacks. 
+    // Set the following metrics for the callback: 'loss', 'val_loss', 'accuracy', 'val_accuracy'.
+    const metrics = ['loss', 'val_loss', 'acc', 'val_acc'];// YOUR CODE HERE
+
+
+    // Create the container for the callback. Set the name to 'Model Training' and
+    // use a height of 1000px for the styles.
+    // YOUR CODE HERE
+    const container = {
+		name: 'Model Training',
+		styles: {
+			height: '1000px'
+		}
+	};
+
+
+    // Use tfvis.show.fitCallbacks() to setup the callbacks.
     // Use the container and metrics defined above as the parameters.
-    const fitCallbacks = // YOUR CODE HERE
-    
+    const fitCallbacks = tfvis.show.fitCallbacks(container, metrics); // YOUR CODE HERE
+
     const BATCH_SIZE = 512;
     const TRAIN_DATA_SIZE = 6000;
     const TEST_DATA_SIZE = 1000;
-    
+
     // Get the training batches and resize them. Remember to put your code
     // inside a tf.tidy() clause to clean up all the intermediate tensors.
     // HINT: Take a look at the MNIST example.
-    const [trainXs, trainYs] = // YOUR CODE HERE
+    // YOUR CODE HERE
+    const [trainXs, trainYs] = tf.tidy(() => {
+        const d = data.nextTrainBatch(TRAIN_DATA_SIZE);
 
-    
+        return [
+            d.xs.reshape([TRAIN_DATA_SIZE, 28, 28, 1]),
+            d.labels
+        ]
+    });
+
+
     // Get the testing batches and resize them. Remember to put your code
     // inside a tf.tidy() clause to clean up all the intermediate tensors.
     // HINT: Take a look at the MNIST example.
-    const [testXs, testYs] = // YOUR CODE HERE
+    // YOUR CODE HERE
+    const [testXs, testYs] = tf.tidy(() => {
+        const d = data.nextTestBatch(TEST_DATA_SIZE);
 
-    
+        return [
+            d.xs.reshape([TEST_DATA_SIZE, 28, 28, 1]),
+            d.labels
+        ];
+    });
+
+
     return model.fit(trainXs, trainYs, {
         batchSize: BATCH_SIZE,
         validationData: [testXs, testYs],
@@ -69,7 +128,7 @@ function setPosition(e){
     pos.x = e.clientX-100;
     pos.y = e.clientY-100;
 }
-    
+
 function draw(e) {
     if(e.buttons!=1) return;
     ctx.beginPath();
@@ -82,28 +141,28 @@ function draw(e) {
     ctx.stroke();
     rawImage.src = canvas.toDataURL('image/png');
 }
-    
+
 function erase() {
     ctx.fillStyle = "black";
     ctx.fillRect(0,0,280,280);
 }
-    
+
 function save() {
     var raw = tf.browser.fromPixels(rawImage,1);
     var resized = tf.image.resizeBilinear(raw, [28,28]);
     var tensor = resized.expandDims(0);
-    
+
     var prediction = model.predict(tensor);
     var pIndex = tf.argMax(prediction, 1).dataSync();
-    
-    var classNames = ["T-shirt/top", "Trouser", "Pullover", 
+
+    var classNames = ["T-shirt/top", "Trouser", "Pullover",
                       "Dress", "Coat", "Sandal", "Shirt",
                       "Sneaker",  "Bag", "Ankle boot"];
-            
-            
+
+
     alert(classNames[pIndex]);
 }
-    
+
 function init() {
     canvas = document.getElementById('canvas');
     rawImage = document.getElementById('canvasimg');
@@ -132,6 +191,3 @@ async function run() {
 }
 
 document.addEventListener('DOMContentLoaded', run);
-
-
-
