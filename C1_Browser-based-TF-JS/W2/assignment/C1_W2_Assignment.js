@@ -19,7 +19,7 @@ function getModel() {
     
     
     // Compile the model using the categoricalCrossentropy loss,
-    // the tf.train.adam() optimizer, and accuracy for your metrics.
+    // the tf.train.adam() optimizer, and `acc` for your metrics.
     model.compile(// YOUR CODE HERE);
     
     return model;
@@ -27,7 +27,7 @@ function getModel() {
 
 async function train(model, data) {
         
-    // Set the following metrics for the callback: 'loss', 'val_loss', 'accuracy', 'val_accuracy'.
+    // Set the following metrics for the callback: 'loss', 'val_loss', 'acc', 'val_acc'.
     const metrics = // YOUR CODE HERE    
 
         
