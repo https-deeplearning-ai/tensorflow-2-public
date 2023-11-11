@@ -13,6 +13,11 @@
             const trainingData = tf.data.csv(trainingUrl, {
                 
                 // YOUR CODE HERE
+                columnConfigs: {
+                    diagnosis: {
+                        isLabel: true
+                    }
+                }
                 
             });
             
@@ -21,8 +26,13 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTrainingData = // YOUR CODE HERE
-                  
+            // YOUR CODE HERE
+            const convertedTrainingData = trainingData.map(({xs, ys}) => {
+                return{xs : Object.values(xs),
+                      ys : Object.values(ys)};
+            }
+            ).batch(10);
+                                                           
             const testingUrl = '/data/wdbc-test.csv';
             
             // Take a look at the 'wdbc-test.csv' file and specify the column
@@ -32,6 +42,11 @@
             const testingData = tf.data.csv(testingUrl, {
                 
                 // YOUR CODE HERE
+                columnConfigs: {
+                    diagnosis:  {
+                        isLabel: true
+                    }
+                }
                 
             });
             
@@ -40,14 +55,20 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTestingData = // YOUR CODE HERE
+            // YOUR CODE HERE
+            const convertedTestingData = trainingData.map(({xs, ys}) => {
+                return{xs : Object.values(xs), ys : Object.values(ys)};
+            }
+            ).batch(10);
                   
 
             // Specify the number of features in the space below.
             // HINT: You can get the number of features from the number of columns
             // and the number of labels in the training data. 
-            const numOfFeatures = // YOUR CODE HERE
-            
+            // YOUR CODE HERE
+            const numOfFeatures = (await trainingData.columnNames()).length - 1
+            console.log(numOfFeatures);
+                  
                 
             // In the space below create a neural network that predicts 1 if the diagnosis is malignant
             // and 0 if the diagnosis is benign. Your neural network should only use dense
@@ -60,12 +81,14 @@
             const model = tf.sequential();
             
             // YOUR CODE HERE
-
-            
+            model.add(tf.layers.dense({inputShape: [numOfFeatures], units: 32, activation: "relu"}));
+            model.add(tf.layers.dense({ units: 1, activation: "sigmoid"}));
+            console.log(model.summary())
             
             // Compile the model using the binaryCrossentropy loss, 
-            // the rmsprop optimizer, and accuracy for your metrics. 
-            model.compile(// YOUR CODE HERE);
+            // the rmsprop optimizer, and accuracy for your metrics.
+            // YOUR CODE HERE
+            model.compile({loss: "binaryCrossentropy", optimizer: tf.train.rmsprop(0.05), metrics: ['accuracy']});
             
             
             await model.fitDataset(convertedTrainingData, 
