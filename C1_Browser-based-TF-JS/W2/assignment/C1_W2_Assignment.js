@@ -1,4 +1,5 @@
 import {FMnistData} from './fashion-data.js';
+
 var canvas, ctx, saveButton, clearButton;
 var pos = {x:0, y:0};
 var rawImage;
@@ -15,12 +16,50 @@ function getModel() {
     // HINT: Take a look at the MNIST example.
     model = tf.sequential();
     
-    // YOUR CODE HERE
-    
-    
-    // Compile the model using the categoricalCrossentropy loss,
+    // Add the first convolutional layer
+    model.add(tf.layers.conv2d({
+        inputShape: [28, 28, 1],
+        kernelSize: 3,
+        filters: 32,
+        activation: 'relu',
+        kernelInitializer: 'varianceScaling'
+    }));
+
+    // Add a max pooling layer
+    model.add(tf.layers.maxPooling2d({poolSize: [2, 2]}));
+
+    // Add another convolutional layer
+    model.add(tf.layers.conv2d({
+        kernelSize: 3,
+        filters: 64,
+        activation: 'relu'
+    }));
+
+    // Add a max pooling layer
+    model.add(tf.layers.maxPooling2d({poolSize: [2, 2]}));
+
+    // Add a flatten layer
+    model.add(tf.layers.flatten());
+
+    // Add a dense layer
+    model.add(tf.layers.dense({
+        units: 128,
+        activation: 'relu'
+    }));
+
+    // Add the output layer
+    model.add(tf.layers.dense({
+        units: 10,
+        activation: 'softmax'
+    }));
+
+    // Compile the model using categoricalCrossentropy loss,
     // the tf.train.adam() optimizer, and `acc` for your metrics.
-    model.compile(// YOUR CODE HERE);
+    model.compile({
+        optimizer: tf.train.adam(),
+        loss: 'categoricalCrossentropy',
+        metrics: ['accuracy']
+    });
     
     return model;
 }
@@ -28,17 +67,18 @@ function getModel() {
 async function train(model, data) {
         
     // Set the following metrics for the callback: 'loss', 'val_loss', 'acc', 'val_acc'.
-    const metrics = // YOUR CODE HERE    
+    const metrics = ['loss', 'val_loss', 'acc', 'val_acc'];    
 
         
     // Create the container for the callback. Set the name to 'Model Training' and 
     // use a height of 1000px for the styles. 
-    const container = // YOUR CODE HERE   
+    const container = document.getElementById('main');
+    container.style = 'height: 1000px;';
     
     
     // Use tfvis.show.fitCallbacks() to setup the callbacks. 
     // Use the container and metrics defined above as the parameters.
-    const fitCallbacks = // YOUR CODE HERE
+    const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
     
     const BATCH_SIZE = 512;
     const TRAIN_DATA_SIZE = 6000;
@@ -47,14 +87,24 @@ async function train(model, data) {
     // Get the training batches and resize them. Remember to put your code
     // inside a tf.tidy() clause to clean up all the intermediate tensors.
     // HINT: Take a look at the MNIST example.
-    const [trainXs, trainYs] = // YOUR CODE HERE
-
+    const [trainXs, trainYs] = tf.tidy(() => {
+        const d = data.nextTrainBatch(TRAIN_DATA_SIZE);
+        return [
+            d.xs.reshape([TRAIN_DATA_SIZE, 28, 28, 1]),
+            d.labels
+        ];
+    });
     
     // Get the testing batches and resize them. Remember to put your code
     // inside a tf.tidy() clause to clean up all the intermediate tensors.
     // HINT: Take a look at the MNIST example.
-    const [testXs, testYs] = // YOUR CODE HERE
-
+    const [testXs, testYs] = tf.tidy(() => {
+        const d = data.nextTestBatch(TEST_DATA_SIZE);
+        return [
+            d.xs.reshape([TEST_DATA_SIZE, 28, 28, 1]),
+            d.labels
+        ];
+    });
     
     return model.fit(trainXs, trainYs, {
         batchSize: BATCH_SIZE,
@@ -132,6 +182,3 @@ async function run() {
 }
 
 document.addEventListener('DOMContentLoaded', run);
-
-
-
