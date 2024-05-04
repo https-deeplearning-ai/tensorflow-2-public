@@ -72,8 +72,6 @@ async function train(model, data) {
     // Create the container for the callback. Set the name to 'Model Training' and 
     // use a height of 1000px for the styles. 
     const container = document.getElementById('main');
-    container.style = 'height: 1000px;';
-
 
     // Use tfvis.show.fitCallbacks() to setup the callbacks. 
     // Use the container and metrics defined above as the parameters.
@@ -163,12 +161,11 @@ function init() {
     canvas.addEventListener("mousemove", draw);
     canvas.addEventListener("mousedown", setPosition);
     canvas.addEventListener("mouseenter", setPosition);
-    saveButton = document.getElementById('sb');
+    saveButton = document.getElementById('classifyBtn');
     saveButton.addEventListener("click", save);
-    clearButton = document.getElementById('cb');
+    clearButton = document.getElementById('clearBtn');
     clearButton.addEventListener("click", erase);
 }
-
 
 async function run() {
     const data = new FMnistData();
@@ -182,11 +179,3 @@ async function run() {
 }
 
 document.addEventListener('DOMContentLoaded', run);
-
-document.addEventListener('click', function() {
-    console.log('click event');
-});
-
-window.addEventListener('error', function(e) {
-    console.error('Error:', e.message);
-});
