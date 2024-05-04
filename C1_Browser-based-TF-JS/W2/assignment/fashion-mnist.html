@@ -1,21 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fashion Classifier</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.1.0"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
-</head>
-<body>
-    <h1>Fashion Classifier!</h1>
-    <canvas id="canvas" width="280" height="280" style="position:absolute;top:100;left:100;border:8px solid;"></canvas>
-    <img id="canvasimg" style="position:absolute;top:10%;left:52%;width:280;height:280;display:none;">
-    <input type="button" value="Classify" id="classifyBtn" size="48" style="position:absolute;top:400;left:100;">
-    <input type="button" value="Clear" id="clearBtn" size="23" style="position:absolute;top:400;left:180;">
-    <div id="main" style="height: 1000px;"></div>
-    <script src="fashion-data.js" type="module"></script>
-    <script src="C1_W2_Assignment.js" type="module"></script>
-</body>
-</html>
+async function run() {
+    const data = new FMnistData();
+    await data.load();
+    const model = getModel();
+    tfvis.show.modelSummary({ name: 'Model Architecture' }, model);
+    await train(model, data);
+    await model.save('downloads://my_model');
+    init();
+    alert("Training is done, try classifying your drawings!");
+}
 
+document.addEventListener('DOMContentLoaded', run);
+
+document.getElementById('classifyBtn').addEventListener('click', function() {
+    var raw = tf.browser.fromPixels(rawImage, 1);
+    var resized = tf.image.resizeBilinear(raw, [28, 28]);
+    var tensor = resized.expandDims(0);
+
+    var prediction = model.predict(tensor);
+    var pIndex = tf.argMax(prediction, 1).dataSync();
+
+    var classNames = ["T-shirt/top", "Trouser", "Pullover",
+        "Dress", "Coat", "Sandal", "Shirt",
+        "Sneaker", "Bag", "Ankle boot"
+    ];
+
+    alert(classNames[pIndex]);
+});
