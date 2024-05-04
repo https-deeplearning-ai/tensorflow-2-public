@@ -169,7 +169,6 @@ function init() {
     clearButton.addEventListener("click", erase);
 }
 
-
 async function run() {
     const data = new FMnistData();
     await data.load();
