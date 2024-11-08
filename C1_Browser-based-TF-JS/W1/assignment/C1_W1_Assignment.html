@@ -4,7 +4,7 @@
     <script lang="js">
         
         async function run(){
-            const trainingUrl = 'C:/Users/smart user/Downloads/data/wdbc-train.csv';
+            const trainingUrl = './data/wdbc-train.csv';
             
             // Take a look at the 'wdbc-train.csv' file and specify the column
             // that should be treated as the label in the space below.
@@ -27,7 +27,7 @@
                 return {xs: Object.values(xs), ys: Object.values(ys)};
             }).batch(10);
                   
-            const testingUrl = 'C:/Users/smart user/Downloads/data/wdbc-test.csv';
+            const testingUrl = './data/wdbc-test.csv';
             
             // Take a look at the 'wdbc-test.csv' file and specify the column
             // that should be treated as the label in the space below..
