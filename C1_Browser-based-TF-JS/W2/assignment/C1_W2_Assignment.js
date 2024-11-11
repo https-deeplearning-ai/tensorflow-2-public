@@ -54,19 +54,19 @@ async function train(model, data) {
     const fitCallbacks = tfvis.show.fitCallbacks(container, metrics);
 
     const BATCH_SIZE = 512;
-    const TRAIN_DATA_SIZE = 6000;
-    const TEST_DATA_SIZE = 1000;
+    const TRAIN_DATA_SIZE = 60000; // Ukuran data pelatihan
+    const TEST_DATA_SIZE = 10000; // Ukuran data pengujian
 
     // Mendapatkan batch pelatihan dan mengubah ukuran
     const [trainXs, trainYs] = tf.tidy(() => {
         const d = data.getTrainData();
-        return [d.xs.reshape([TRAIN_DATA_SIZE, 28, 28, 1]), d.ys];
+        return [d.xs, d.ys]; // Tidak perlu reshape jika sudah dalam bentuk tensor
     });
 
     // Mendapatkan batch pengujian dan mengubah ukuran
     const [testXs, testYs] = tf.tidy(() => {
         const d = data.getTestData();
-        return [d.xs.reshape([TEST_DATA_SIZE, 28, 28, 1]), d.ys];
+        return [d.xs, d.ys]; // Tidak perlu reshape jika sudah dalam bentuk tensor
     });
 
     return model.fit(trainXs, trainYs, {
@@ -79,12 +79,12 @@ async function train(model, data) {
 }
 
 function setPosition(e) {
-    pos.x = e.clientX - 100;
-    pos.y = e.clientY - 100;
+    pos.x = e.clientX - canvas.offsetLeft; // Menghitung posisi dengan benar
+    pos.y = e.clientY - canvas.offsetTop; // Menghitung posisi dengan benar
 }
 
 function draw(e) {
-    if (e.buttons != 1) return;
+    if (e.buttons !== 1) return; // Menggunakan strict equality
     ctx.beginPath();
     ctx.lineWidth = 24;
     ctx.lineCap = 'round';
@@ -98,16 +98,16 @@ function draw(e) {
 
 function erase() {
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 280, 280);
+    ctx.fillRect(0, 0, canvas.width, canvas.height); // Menggunakan ukuran kanvas
 }
 
-function save() {
-    var raw = tf.browser.fromPixels(rawImage, 1);
+async function save() {
+    var raw = tf.browser.fromPixels(rawImage);
     var resized = tf.image.resizeBilinear(raw, [28, 28]);
-    var tensor = resized.expandDims(0);
+    var tensor = resized.expandDims(0).toFloat().div(tf.scalar(255)); // Normalisasi
 
     var prediction = model.predict(tensor);
-    var pIndex = tf.argMax(prediction, 1).dataSync();
+    var pIndex = tf.argMax(prediction, 1).dataSync()[0]; // Ambil indeks pertama
 
     var classNames = ["T-shirt/top", "Trouser", "Pullover",
                       "Dress", "Coat", "Sandal", "Shirt",
@@ -119,9 +119,9 @@ function save() {
 function init() {
     canvas = document.getElementById('canvas');
     rawImage = document.getElementById('canvasimg');
-    ctx = canvas.getContext("2d");
+    ctx = canvas.getContext("2d", { willReadFrequently: true }); // Menambahkan opsi ini
     ctx.fillStyle = "black";
-    ctx.fillRect(0, 0, 280, 280);
+    ctx.fillRect(0, 0, canvas.width, canvas.height); // Menggunakan ukuran kanvas
     canvas.addEventListener("mousemove", draw);
     canvas.addEventListener("mousedown", setPosition);
     canvas.addEventListener("mouseenter", setPosition);
