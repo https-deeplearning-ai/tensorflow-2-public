@@ -28,6 +28,7 @@ async function train() {
     ]
   });
 
+  
   const optimizer = tf.train.adam(0.0001);
 
   model.compile({
