@@ -18,8 +18,12 @@ async function train() {
   model = tf.sequential({
     layers: [
       tf.layers.flatten({inputShape: mobilenet.outputs[0].shape.slice(1)}),
+      tf.layers.dense({units: 256, activation: 'relu'}),
+      tf.layers.batchNormalization(),
+      tf.layers.dropout({rate: 0.3}), // Dropout layer
       tf.layers.dense({units: 128, activation: 'relu'}),
-      tf.layers.dense({units: 64, activation: 'relu'}),
+      tf.layers.batchNormalization(),
+      tf.layers.dropout({rate: 0.3}), // Dropout layer
       tf.layers.dense({units: 5, activation: 'softmax'}) // Output layer
     ]
   });
@@ -32,13 +36,14 @@ async function train() {
     metrics: ['accuracy']
   });
 
-  let loss = 0;
+let loss = 0;
   await model.fit(dataset.xs, dataset.ys, {
-    epochs: 10,
+    epochs: 20, // Meningkatkan jumlah epochs untuk pelatihan yang lebih baik
+    batchSize: 32, // Menambahkan batch size
+    validationSplit: 0.2, // Menambahkan validation split untuk generalisasi lebih baik
     callbacks: {
-      onBatchEnd: async (batch, logs) => {
-        loss = logs.loss.toFixed(5);
-        console.log('LOSS: ' + loss);
+      onEpochEnd: async (epoch, logs) => {
+        console.log(`Epoch ${epoch + 1}: loss = ${logs.loss.toFixed(5)}, accuracy = ${logs.acc.toFixed(5)}`);
       }
     }
   });
