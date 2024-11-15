@@ -24,12 +24,12 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTrainingData = trainingData.map(({ xs, ys }) => { // YOUR CODE HERE 
+            const convertedTrainingData = trainingData.map(({ xs, ys }) => { 
                 return {
                     xs: Object.values(xs),
                     ys: Object.values(ys)
                 };
-            }).batch(32);
+            }).batch(32); // YOUR CODE HERE
                   
             const testingUrl = '/data/wdbc-test.csv';
             
@@ -51,12 +51,12 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTestingData = testingData.map(({ xs, ys }) => { // YOUR CODE HERE
+            const convertedTestingData = testingData.map(({ xs, ys }) => { 
                 return {
                     xs: Object.values(xs),
                     ys: Object.values(ys)
                 };
-            }).batch(32);
+            }).batch(32); // YOUR CODE HERE
                   
 
             // Specify the number of features in the space below.
@@ -98,7 +98,7 @@
                 loss: 'binaryCrossentropy',
                 optimizer: 'rmsprop',
                 metrics: ['accuracy']
-            }); // YOUR CODE HERE);
+            }) // YOUR CODE HERE);
             
             await model.fitDataset(convertedTrainingData, 
                              {epochs:100,
