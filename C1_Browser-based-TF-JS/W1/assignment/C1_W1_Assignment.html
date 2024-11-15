@@ -12,9 +12,6 @@
             // HINT: Remember that you are trying to build a classifier that 
             // can predict from the data whether the diagnosis is malignant or benign.
             const trainingData = tf.data.csv(trainingUrl, {
-
-                // YOUR CODE HERE
-
                 columnConfigs: {
                     diagnosis: { isLabel: true }
                 }
