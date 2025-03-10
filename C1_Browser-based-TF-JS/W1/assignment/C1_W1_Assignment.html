@@ -13,7 +13,11 @@
             const trainingData = tf.data.csv(trainingUrl, {
                 
                 // YOUR CODE HERE
-                
+                columnConfigs: {
+					diagnosis: {
+						isLabel: true
+					}
+				} 
             });
             
             // Convert the training data into arrays in the space below.
@@ -32,7 +36,11 @@
             const testingData = tf.data.csv(testingUrl, {
                 
                 // YOUR CODE HERE
-                
+                columnConfigs: {
+					diagnosis: {
+						isLabel: true
+					}
+				} 
             });
             
             // Convert the testing data into arrays in the space below.
@@ -41,13 +49,18 @@
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
             const convertedTestingData = // YOUR CODE HERE
-                  
+                  testingData.map(({xs,ys}) =>
+					{// Convert xs(features) and ys(labels) from object form (keyed by
+					 // column name) to array form.
+					 return {xs: Object.values(xs), ys: Object.values(ys)};
+					})
+					.batch(10);
 
             // Specify the number of features in the space below.
             // HINT: You can get the number of features from the number of columns
             // and the number of labels in the training data. 
             const numOfFeatures = // YOUR CODE HERE
-            
+                (await trainingData.columnNames()).length - 1;
                 
             // In the space below create a neural network that predicts 1 if the diagnosis is malignant
             // and 0 if the diagnosis is benign. Your neural network should only use dense
@@ -60,6 +73,26 @@
             const model = tf.sequential();
             
             // YOUR CODE HERE
+            // input layer + first layer
+			model.add(tf.layers.dense
+				({
+				inputShape: [numOfFeatures],
+				activation: "sigmoid",
+				units: 5
+				}));
+			// hidden layer
+			model.add(tf.layers.dense
+				({
+				units: 10,
+				activation: "relu"
+				}));
+			// output layer
+			model.add(tf.layers.dense
+				({
+				units: 1,
+				activation: "sigmoid"
+				}));				
+			        
 
             
             
