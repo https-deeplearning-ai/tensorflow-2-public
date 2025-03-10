@@ -1,17 +1,93 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fashion Classifier</title>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.1.0"></script>
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs-vis"></script>
-
 </head>
 <body>
     <h1>Fashion Classifier!</h1>
     <canvas id="canvas" width="280" height="280" style="position:absolute;top:100;left:100;border:8px solid;"></canvas>
     <img id="canvasimg" style="position:absolute;top:10%;left:52%;width:280;height:280;display:none;">
-    <input type="button" value="classify" id="sb" size="48" style="position:absolute;top:400;left:100;">
-    <input type="button" value="clear" id="cb" size="23" style="position:absolute;top:400;left:180;">
+    <input type="button" value="Classify" id="classifyBtn" size="48" style="position:absolute;top:400;left:100;">
+    <input type="button" value="Clear" id="clearBtn" size="23" style="position:absolute;top:400;left:180;">
+    <div id="main" style="height: 1000px;"></div>
     <script src="fashion-data.js" type="module"></script>
     <script src="C1_W2_Assignment.js" type="module"></script>
-    <!-- <script src="C1_W2_Assignment_Solution.js" type="module"></script> -->
+    <script>
+        var canvas, ctx, classifyButton, clearButton;
+        var pos = { x: 0, y: 0 };
+        var rawImage;
+        var model;
+
+        // Function to initialize the canvas and buttons
+        function init() {
+            canvas = document.getElementById('canvas');
+            rawImage = document.getElementById('canvasimg');
+            ctx = canvas.getContext("2d");
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, 280, 280);
+            canvas.addEventListener("mousemove", draw);
+            canvas.addEventListener("mousedown", setPosition);
+            canvas.addEventListener("mouseenter", setPosition);
+
+            // Add event listeners for Classify and Clear buttons
+            classifyButton = document.getElementById('classifyBtn');
+            classifyButton.addEventListener("click", classify);
+
+            clearButton = document.getElementById('clearBtn');
+            clearButton.addEventListener("click", erase);
+        }
+
+        // Function to handle mouse movements and draw on the canvas
+        function draw(e) {
+            if (e.buttons != 1) return;
+            ctx.beginPath();
+            ctx.lineWidth = 24;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = 'white';
+            ctx.moveTo(pos.x, pos.y);
+            setPosition(e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            rawImage.src = canvas.toDataURL('image/png');
+        }
+
+        // Function to set the position for drawing
+        function setPosition(e) {
+            pos.x = e.clientX - 100;
+            pos.y = e.clientY - 100;
+        }
+
+        // Function to clear the canvas
+        function erase() {
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, 280, 280);
+        }
+
+        // Function to handle classification when Classify button is clicked
+        function classify() {
+            // Add your classification logic here
+            // For example, you can display an alert message
+            alert("Classifying...");
+        }
+
+        // Function to load the model and initialize the canvas
+        async function run() {
+            const data = new FMnistData();
+            await data.load();
+            const model = getModel();
+            tfvis.show.modelSummary({ name: 'Model Architecture' }, model);
+            await train(model, data);
+            await model.save('downloads://my_model');
+            init();
+            alert("Training is done, try classifying your drawings!");
+        }
+
+        // Run the initialization function when the DOM content is loaded
+        document.addEventListener('DOMContentLoaded', run);
+    </script>
 </body>
 </html>
