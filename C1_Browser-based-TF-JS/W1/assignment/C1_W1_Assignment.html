@@ -11,9 +11,12 @@
             // HINT: Remember that you are trying to build a classifier that 
             // can predict from the data whether the diagnosis is malignant or benign.
             const trainingData = tf.data.csv(trainingUrl, {
-                
+                columnConfigs: {
+                    species: { 
+                        isLabel: true
+                    }
+                }
                 // YOUR CODE HERE
-                
             });
             
             // Convert the training data into arrays in the space below.
@@ -21,7 +24,14 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTrainingData = // YOUR CODE HERE
+            const convertedTrainingData = trainingData.map(({xs,ys}) => {
+                const labels = [
+                    ys.species == "malignant" ? 1:0,
+                    ys.species == "benign" ? 1:0
+                    ]
+                    return{ xs:Object.values(xs), ys:Object.values(labels)};
+            }).batch(10);
+                    // YOUR CODE HERE
                   
             const testingUrl = '/data/wdbc-test.csv';
             
@@ -30,9 +40,11 @@
             // HINT: Remember that you are trying to build a classifier that 
             // can predict from the data whether the diagnosis is malignant or benign.
             const testingData = tf.data.csv(testingUrl, {
-                
-                // YOUR CODE HERE
-                
+                columnConfigs: {
+                    species: { 
+                        isLabel : true
+                    }
+                }    
             });
             
             // Convert the testing data into arrays in the space below.
@@ -40,13 +52,19 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTestingData = // YOUR CODE HERE
+            const convertedTestingData = testingData.map(({xs,ys}) => {
+                const labels = [
+                    ys.species == "malignant" ? 1:0,
+                    ys.species == "benign" ? 1:0
+                    ]
+                return { xs:Obhect.values(xs), ys:Object.values(labels)};
+            }).batch(10);// YOUR CODE HERE
                   
 
             // Specify the number of features in the space below.
             // HINT: You can get the number of features from the number of columns
             // and the number of labels in the training data. 
-            const numOfFeatures = // YOUR CODE HERE
+            const numOfFeatures = (await trainingData.columnNames()).length - 1; // YOUR CODE HERE 
             
                 
             // In the space below create a neural network that predicts 1 if the diagnosis is malignant
@@ -58,14 +76,12 @@
             // using ReLu activation functions where applicable. For this dataset only a few
             // hidden layers should be enough to get a high accuracy.  
             const model = tf.sequential();
-            
+            model.add(tf.layers.dense({inputShape:[numofFeatures],activation="relu", units:10}))
+            model.add(tf.layers.dense({activation:"sigmoid", units : 2}));
             // YOUR CODE HERE
-
-            
-            
             // Compile the model using the binaryCrossentropy loss, 
             // the rmsprop optimizer, and accuracy for your metrics. 
-            model.compile(// YOUR CODE HERE);
+            model.compile(loss:"binarycrossentropy", optimizer:tf.train.adam(0.0612)});// YOUR CODE HERE);
             
             
             await model.fitDataset(convertedTrainingData, 
