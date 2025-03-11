@@ -13,6 +13,9 @@
             const trainingData = tf.data.csv(trainingUrl, {
                 
                 // YOUR CODE HERE
+                columnConfigs: {
+                    diagnosis: { isLabel: true }
+                }
                 
             });
             
@@ -21,7 +24,12 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTrainingData = // YOUR CODE HERE
+            const convertedTrainingData = trainingData.map(({ xs, ys }) => { 
+                return {
+                    xs: Object.values(xs),
+                    ys: Object.values(ys)
+                };
+            }).batch(32); // YOUR CODE HERE
                   
             const testingUrl = '/data/wdbc-test.csv';
             
@@ -32,6 +40,9 @@
             const testingData = tf.data.csv(testingUrl, {
                 
                 // YOUR CODE HERE
+                columnConfigs: {
+                    diagnosis: { isLabel: true }
+                }
                 
             });
             
@@ -40,13 +51,18 @@
             // Therefore, there is no need to convert string labels into
             // a one-hot encoded array of label values like we did in the
             // Iris dataset example. 
-            const convertedTestingData = // YOUR CODE HERE
+            const convertedTestingData = testingData.map(({ xs, ys }) => { 
+                return {
+                    xs: Object.values(xs),
+                    ys: Object.values(ys)
+                };
+            }).batch(32); // YOUR CODE HERE
                   
 
             // Specify the number of features in the space below.
             // HINT: You can get the number of features from the number of columns
             // and the number of labels in the training data. 
-            const numOfFeatures = // YOUR CODE HERE
+            const numOfFeatures = 30; // YOUR CODE HERE 
             
                 
             // In the space below create a neural network that predicts 1 if the diagnosis is malignant
@@ -60,13 +76,29 @@
             const model = tf.sequential();
             
             // YOUR CODE HERE
+            model.add(tf.layers.dense({
+                inputShape: [numOfFeatures], 
+                units: 16,
+                activation: 'relu'
+            }));
 
-            
+            model.add(tf.layers.dense({
+                units: 8,
+                activation: 'relu'
+            }));
+
+            model.add(tf.layers.dense({
+                units: 1,
+                activation: 'sigmoid' 
+            }));
             
             // Compile the model using the binaryCrossentropy loss, 
             // the rmsprop optimizer, and accuracy for your metrics. 
-            model.compile(// YOUR CODE HERE);
-            
+            model.compile( {
+                loss: 'binaryCrossentropy',
+                optimizer: 'rmsprop',
+                metrics: ['accuracy']
+            }) // YOUR CODE HERE);
             
             await model.fitDataset(convertedTrainingData, 
                              {epochs:100,
