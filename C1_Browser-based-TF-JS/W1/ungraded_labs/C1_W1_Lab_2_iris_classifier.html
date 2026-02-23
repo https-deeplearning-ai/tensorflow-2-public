@@ -3,7 +3,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest"></script>
     <script lang="js">
         async function run(){
-            const csvUrl = '/data/iris.csv';
+            const csvUrl = './data/iris.csv';
             const trainingData = tf.data.csv(csvUrl, {
                 columnConfigs: {
                     species: {
